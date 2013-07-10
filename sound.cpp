@@ -1,8 +1,12 @@
 // Load some sound in openAL / ALURE
 #include <cstdio>
 #include <AL/alure.h>
+#include "kiss_fft130/kiss_fft.h"
 
 int main(int argc, char *argv[]) {
+
+    kiss_fft_cfg fftcfg = kiss_fft_alloc(1032, 0, NULL, NULL);
+
     ALCcontext *context;
     ALCdevice *device;
 
@@ -26,6 +30,8 @@ int main(int argc, char *argv[]) {
     ALint state = AL_PLAYING;
     ALint processed = 0;
 
+    kiss_fft_cpx in[1032], out[1032];
+
     while(true) {
         alGetSourcei(src, AL_SOURCE_STATE, &state);
         alGetSourcei(src, AL_BUFFERS_PROCESSED, &processed);
@@ -35,10 +41,16 @@ int main(int argc, char *argv[]) {
 
             processed = alureBufferDataFromStream(stream, processed, bufs);
             alSourceQueueBuffers(src, processed, bufs);
+            for(int i = 0; i < 1032; ++i) {
+                in[i].r = buf[0][i];
+                in[i].i = 0;
+                printf("%d ", buf[i]);
+            }
         }
 
         if(state != AL_PLAYING)
             alSourcePlay(src);
+
     }
 
     alGetError();

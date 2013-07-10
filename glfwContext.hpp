@@ -15,20 +15,6 @@ using std::make_pair;
 using std::map;
 
 class glfwContext {
-  private:
-    GLFWwindow* _windowHandle;
-
-    // Window Settings
-    map<int, int> _windowHints;
-    int _width;
-    int _height;
-    string _title;
-    GLFWmonitor* _monitor;
-    glfwContext* _sharedContext;
-
-    // Helper Functions
-    void assignAllHints();
-
   public:
     glfwContext();
     ~glfwContext();
@@ -48,6 +34,19 @@ class glfwContext {
     void setWidth(int width);
     void setTitle(string title);
 
+  private:
+    GLFWwindow* _windowHandle;
+
+    // Window Settings
+    map<int, int> _windowHints;
+    int _width;
+    int _height;
+    string _title;
+    GLFWmonitor* _monitor;
+    glfwContext* _sharedContext;
+
+    // Helper Functions
+    void assignAllHints();
 };
 
 #endif //_CONTEXT_HPP
