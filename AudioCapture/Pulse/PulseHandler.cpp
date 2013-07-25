@@ -5,11 +5,16 @@
 #include <cassert>
 #include <cstdio>
 
+void callbacktest() {
+    fprintf(stdout, "got it!\n" );
+}
+
 PulseHandler::PulseHandler() {
     initDefaults();
     initMainloop();
     initContext();
     initStream();
+    pcmtest.setNewPCMDataCallback(&callbacktest);
 };
 
 PulseHandler::~PulseHandler() {
@@ -20,7 +25,7 @@ PulseHandler::~PulseHandler() {
 
 void PulseHandler::initDefaults() {
     _context_flags          = (pa_context_flags_t) 0;
-    _device_name            = "alsa_output.pci-0000_00_1b.0.analog-stereo.monitor";
+    _device_name            = "alsa_output.pci-0000_00_1b.0.analog-stereo.monitor"; //TODO pick devices
     _sample_spec.format     = PA_SAMPLE_FLOAT32LE;
     _sample_spec.rate       = 44100;
     _sample_spec.channels   = 2;
