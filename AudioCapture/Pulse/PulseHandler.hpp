@@ -10,9 +10,10 @@ using std::string;
 
 class PulseHandler {
   public:
-      PulseHandler();
-      ~PulseHandler();
-      PCM pcmtest;
+    PulseHandler();
+    ~PulseHandler();
+    PCM pcmtest;
+
 
   private:
   // Intializer helper functions

@@ -1,0 +1,2 @@
+VisLibInterface::VisLibInterface() {
+};

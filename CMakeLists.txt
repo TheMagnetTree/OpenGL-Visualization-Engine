@@ -4,3 +4,4 @@ set (Vis_VERSION_MAJOR 0)
 set (Vis_VERSION_MINOR 1)
 
 add_executable(Vis main.cpp)
+target_link_libraries()

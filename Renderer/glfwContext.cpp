@@ -1,5 +1,5 @@
-#include <iterator>
 #include "glfwContext.hpp"
+#include <iterator>
 
 // constructors
 glfwContext::glfwContext() {
@@ -14,32 +14,61 @@ glfwContext::~glfwContext() {
 }
 
 // Stuff
-GLFWwindow* glfwContext::createWindow() {
+GLFWwindow *glfwContext::createWindow(std::pair<int, int> dim, std::string title) {
+    _title = title;
+
     assignAllHints();
 
-    _windowHandle = glfwCreateWindow(_width, _height, _title.c_str(), NULL , NULL);
-    return windowHandle();
+    _windowHandle = glfwCreateWindow(dim.first, dim.second, _title.c_str(), NULL , NULL);
+    return _windowHandle;
 }
 
 void glfwContext::swapBuffers() {
     glfwSwapBuffers(_windowHandle);
 }
 
+void glfwContext::makeContextCurrent(glfwContext &context) {
+    glfwMakeContextCurrent(context.windowHandle());
+}
+
+bool glfwContext::getKey(int key, int action) {
+    if(glfwGetKey(_windowHandle, key) == action) return true;
+    else return false;
+}
+
 // Getters
-GLFWwindow* glfwContext::windowHandle() {
+GLFWwindow *glfwContext::windowHandle() {
     return _windowHandle;
 }
 
 int glfwContext::height() {
-    int height;
+    int height = 0;
     glfwGetWindowSize(_windowHandle, NULL, &height);
     return height;
 }
 
 int glfwContext::width() {
-    int width;
+    int width = 0;
     glfwGetWindowSize(_windowHandle, &width, NULL);
     return width;
+}
+
+pair<int, int> glfwContext::windowDims() {
+    int width = 0, height = 0;
+    glfwGetWindowSize(_windowHandle, &width, &height);
+    pair<int, int> dims(width, height);
+    return dims;
+}
+
+string glfwContext::title() {
+    return _title;
+}
+
+pair<double, double> glfwContext::mousePos() {
+    double x = 0, y = 0;
+    glfwGetCursorPos(_windowHandle, &x, &y);
+    pair<double, double> mousePos(x, y);
+    return mousePos;
 }
 
 // Setters
@@ -57,15 +86,24 @@ void glfwContext::setHint(const map<int, int> &hintMap) {
 }
 
 void glfwContext::setHeight(int height) {
-    _height = height;
+    glfwSetWindowSize(_windowHandle, width(), height);
 }
 
 void glfwContext::setWidth(int width) {
-    _width = width;
+    glfwSetWindowSize(_windowHandle, width, height());
+}
+
+void glfwContext::setWindowDims(int width, int height) {
+    glfwSetWindowSize(_windowHandle, width, height);
 }
 
 void glfwContext::setTitle(string title) {
     _title = title;
+    glfwSetWindowTitle(_windowHandle, title.c_str());
+}
+
+void glfwContext::setMousePos(pair<double, double> pos) {
+    glfwSetCursorPos(_windowHandle, pos.first, pos.second);
 }
 
 // Helpers

@@ -43,7 +43,7 @@ void PCM::faddPCM(const float *newPCMData, const int numsamples) {
     }
     if(newPCMDataCallback)
     {
-        newPCMDataCallback();
+        newPCMDataCallback((void *) &PCMData);
     }
 }
 

@@ -5,6 +5,7 @@
 #include <vector>
 #include <utility>
 #include <map>
+#include <memory>
 
 #include <GLFW/glfw3.h>
 
@@ -19,13 +20,21 @@ class glfwContext {
     glfwContext();
     ~glfwContext();
 
-    GLFWwindow* createWindow();
+    //GLFWwindow* createWindow();
+    GLFWwindow *createWindow(pair<int, int> dim, string title);
     void swapBuffers();
 
+    static void makeContextCurrent(glfwContext &context);
+
+    bool getKey(int key, int action);
+
     // Getters
-    GLFWwindow* windowHandle();
+    GLFWwindow *windowHandle();
     int height();
     int width();
+    string title();
+    pair<double, double> mousePos();
+    pair<int, int> windowDims();
 
     // Setters
     void setHint(int target, int hint);
@@ -33,17 +42,17 @@ class glfwContext {
     void setHeight(int height);
     void setWidth(int width);
     void setTitle(string title);
+    void setMousePos(pair<double, double> pos);
+    void setWindowDims(int width, int height);
 
   private:
-    GLFWwindow* _windowHandle;
+    GLFWwindow *_windowHandle;
 
     // Window Settings
     map<int, int> _windowHints;
-    int _width;
-    int _height;
     string _title;
-    GLFWmonitor* _monitor;
-    glfwContext* _sharedContext;
+    GLFWmonitor *_monitor;
+    glfwContext *_sharedContext;
 
     // Helper Functions
     void assignAllHints();

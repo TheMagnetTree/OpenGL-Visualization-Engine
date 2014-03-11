@@ -1,12 +1,14 @@
 #include "PulseHandler.hpp"
 
 #include <functional>
-
 #include <cassert>
 #include <cstdio>
 
-void callbacktest() {
-    fprintf(stdout, "got it!\n" );
+void callbacktest(void* data) {
+    vector<float> *PCMData = reinterpret_cast<vector<float> *>(data);
+    for(int i = 0; i < PCMData->size();i++) {
+        printf("%f\n", p(*)(PCMData[i]));
+    }
 }
 
 PulseHandler::PulseHandler() {
@@ -72,7 +74,7 @@ void PulseHandler::destroyStream() {
     pa_stream_disconnect(_stream);
 };
 
-// Pass class instance pointer as userdata  TODO: WTF IS THIS HACK
+// Pass class instance pointer as userdata
 void PulseHandler::context_state_callback(pa_context *context, void *userdata) {
     assert(context);
     PulseHandler *handler = reinterpret_cast<PulseHandler *>(userdata);
@@ -94,7 +96,7 @@ void PulseHandler::context_state_callback(pa_context *context, void *userdata) {
     }
 }
 
-// Pass class instance pointer as userdata  TODO: WTF IS THIS HACK
+// Pass class instance pointer as userdata 
 void PulseHandler::stream_read_callback(pa_stream *stream, size_t length, void *userdata) {
     PulseHandler *handler = reinterpret_cast<PulseHandler *>(userdata);
     if(pa_stream_peek(handler->_stream, &handler->_peek_data, &length) < 0) {
