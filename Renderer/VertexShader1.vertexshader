@@ -1,11 +1,7 @@
-#version 330 core
+#version 420 core
 
-layout(location = 0) in vec3 vertexPosition_modelspace;
-out vec4 fragment_color;
-uniform mat4 MVP;
-uniform float time;
+in vec3 vp;
 
 void main() {
-    vec4 v = vec4(vertexPosition_modelspace, 1);
-    gl_Position = MVP * v;
-};
+    gl_Position = vec4(vp, 1.0);
+}

@@ -38,10 +38,10 @@ class GL_LINES_CanopyFractal : public CanopyFractal {
     GLuint timeID;
     GLuint vertexBuffer; 
 
-    glm::mat4 Model, View, Projection;
+    glm::dmat4 Model, View, Projection;
 
-    void drawRecursive(CanopyNode *node, glm::mat4 scale, glm::mat4 translation, glm::mat4 rotation);
-    void drawRecursive(CanopyNode *node, glm::mat4 pos, glm::mat4 scale);
+    void drawRecursive(CanopyNode *node, glm::dmat4 scale, glm::dmat4 translation, glm::dmat4 drotation);
+    void drawRecursive(CanopyNode *node, glm::dmat4 pos, glm::dmat4 scale);
 };
 
 #endif // _FRACTALCANOPY_HPP

@@ -35,21 +35,21 @@ void CanopyFractal::generateFractal(CanopyNode *node, int iterations, double len
     startnode->angle_degrees = 0;
 };
 
-void GL_LINES_CanopyFractal::drawRecursive(CanopyNode *node, glm::mat4 scale, glm::mat4 translation, glm::mat4 rotation) {
-    glm::mat4 nextTranslation = glm::translate(0.0f, (float)node->length, 0.0f);
-    glm::mat4 nextScale       = glm::scale(0.5f, 0.5f, 0.5f);
-    glm::vec3 eulerAngles(0, 0, glm::radians((float)node->angle_degrees));
-    glm::quat Quaternion(eulerAngles);
-    glm::mat4 nextRotation    = glm::toMat4(Quaternion);
+void GL_LINES_CanopyFractal::drawRecursive(CanopyNode *node, glm::dmat4 scale, glm::dmat4 translation, glm::dmat4 rotation) {
+    glm::dmat4 nextTranslation = glm::translate(glm::dmat4(1.0), glm::dvec3(0.0, (double)node->length, 0.0));
+    glm::dmat4 nextScale       = glm::scale(glm::dmat4(10) ,glm::dvec3(0.5, 0.5, 0.5));
+    glm::dvec3 eulerAngles(0.0, 0.0, (double)node->angle_degrees);
+    glm::dquat Quaternion(eulerAngles);
+    glm::dmat4 nextRotation    = glm::mat4_cast(Quaternion);
 
     translation = nextTranslation + translation;
     scale = nextScale * scale;
     rotation = nextRotation * rotation;
 
-    glm::mat4 currentModel = translation * rotation * scale;
-    glm::mat4 MVP = Projection * View * currentModel;
+    glm::dmat4 currentModel = translation * rotation * scale;
+    glm::dmat4 MVP = Projection * View * currentModel;
     glUseProgram(programID);
-    glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
+    glUniformMatrix4dv(matrixID, 1, GL_FALSE, &MVP[0][0]);
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexAttribPointer(0,
@@ -68,19 +68,19 @@ void GL_LINES_CanopyFractal::drawRecursive(CanopyNode *node, glm::mat4 scale, gl
     }
 }
 
-void GL_LINES_CanopyFractal::drawRecursive(CanopyNode *node, glm::mat4 pos, glm::mat4 scale) {
-    glm::vec3 eulerAngles(0, 0, glm::radians((float)node->angle_degrees));
-    glm::quat Quaternion(eulerAngles);
-    glm::mat4 rotation = glm::toMat4(Quaternion);
+void GL_LINES_CanopyFractal::drawRecursive(CanopyNode *node, glm::dmat4 pos, glm::dmat4 scale) {
+    glm::dvec3 eulerAngles(0.0, 0.0, (double)node->angle_degrees);
+    glm::dquat Quaternion(eulerAngles);
+    glm::dmat4 rotation = glm::mat4_cast(Quaternion);
 
     pos = pos * rotation;
-    glm::mat4 model = pos * scale;
-    glm::mat4 MVP = Projection * View * model;
+    glm::dmat4 model = pos * scale;
+    glm::dmat4 MVP = Projection * View * model;
     GLfloat mytime = time(NULL);
     
     glUseProgram(programID);
-    glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
-    glUniform1f(timeID, mytime);
+    glUniformMatrix4dv(matrixID, 1, GL_FALSE, &MVP[0][0]);
+    glUniform1d(timeID, mytime);
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexAttribPointer(0,
@@ -91,8 +91,8 @@ void GL_LINES_CanopyFractal::drawRecursive(CanopyNode *node, glm::mat4 pos, glm:
                           (void*)0);
     glDrawArrays(GL_LINES, 0, 2);
     glDisableVertexAttribArray(0);
-    glm::mat4 translation = glm::translate(0.0f, (float)node->length, 0.0f);
-    glm::mat4 s = glm::scale(0.5f, 0.5f, 0.5f);
+    glm::dmat4 translation = glm::translate(glm::dmat4(1.0), glm::dvec3(0.0, (double)node->length, 0.0));
+    glm::dmat4 s = glm::scale(glm::dmat4(1.0), glm::dvec3(0.5, 0.5, 0.5));
     scale = scale * s;
     pos = pos * translation;
     if(node->rnode) {
